@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+service ManagerService {
+    rpc AddOffer (Offer) returns (AddOfferResponse);
+}
+
+message AddOfferResponse {
+    Status status = 1;
+}
+
+enum Status {
+    OK = 0;
+    CREATED = 1;
+    CONFLICT = 2;
+    ERROR = 3;
+}
+  
+message Offer {
+    string image_url = 1;
+    string offer_url = 2;
+    string title = 3;
+    optional string params = 4;
+    optional string tag = 5;
+    optional string id = 6;
+}
