@@ -2,20 +2,40 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 # from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import urllib.request
 import uuid
+from enum import Enum
 
-# setup
-options = Options()
-options.binary_location = '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser'
-# options.add_argument("--headless")
-driver = webdriver.Chrome(options = options)
+class Browser(Enum):
+    BRAVE = 1
+    FIREFOX = 2
+
+def get_driver_brave():
+    options = ChromeOptions()
+    options.binary_location = '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser'
+    # options.add_argument("--headless")
+    return webdriver.Chrome(options = options)
+
+def get_driver_firefox():
+    options = FirefoxOptions()
+    return webdriver.Firefox(options=options)
+
+
+def get_driver(browser: Browser):
+    match browser:
+        case Browser.BRAVE:
+            return get_driver_brave()
+        case Browser.FIREFOX:
+            return get_driver_firefox()
+
+driver = get_driver(Browser.FIREFOX)
 # driver.get("https://www.olx.pl/nieruchomosci/ldzan/?search%5Bdist%5D=50&view=grid")
 driver.get("https://www.olx.pl/nieruchomosci/dzialki/ldzan/?search%5Bdist%5D=5&view=grid")
-
+    
 # dismiss cookies popup
 # try:
 #     cookies_button = (By.CSS_SELECTOR, "button#onetrust-accept-btn-handler")
